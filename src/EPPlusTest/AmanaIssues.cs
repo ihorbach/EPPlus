@@ -1,15 +1,12 @@
-using OfficeOpenXml.FormulaParsing.Excel.Functions;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using OfficeOpenXml.FormulaParsing.ExpressionGraph.FunctionCompilers;
-
 namespace EPPlusTest
 {
-    using EPPlusTest.Properties;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using OfficeOpenXml;
     using System;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Threading;
 
     [TestClass]
     public class AmanaIssues : TestBase
@@ -443,6 +440,46 @@ namespace EPPlusTest
             // Arrange
             Assert.AreEqual("Anlagevermögen", sheet.Cells["B8"].Value);
             Assert.AreEqual("123 456 ABC", sheet.Cells["B9"].Value);
+        }
+
+        [TestMethod]
+        public void Test_text_formular_should_not_delete_decimals_in_german_format()
+        {
+            //Arrange
+#if Core
+                var dir = AppContext.BaseDirectory;
+                dir = Directory.GetParent(dir).Parent.Parent.Parent.FullName;
+#else
+            var dir = AppDomain.CurrentDomain.BaseDirectory;
+#endif
+            var excelPackage = new ExcelPackage(new FileInfo(Path.Combine(dir, "Workbooks", "TestDoc_text_format_xlsx.xlsx")));
+            
+            //Act
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
+
+            excelPackage.Workbook.Calculate();
+            var ws = excelPackage.Workbook.Worksheets[0];
+
+            //Asserts
+            Assert.AreEqual("292.336,30 €", ws.Cells["A1"].Text);
+            Assert.AreEqual("292336,300000 €", ws.Cells["A2"].Value);
+            Assert.AreEqual("292.336 €", ws.Cells["A3"].Value);
+            Assert.AreEqual("292.336,30 €", ws.Cells["A5"].Value);
+            Assert.AreEqual("-292336-- €", ws.Cells["A6"].Value);
+            Assert.AreEqual("233.127,25 €)", ws.Cells["A7"].Value);
+            Assert.AreEqual("-233127--€)", ws.Cells["A8"].Value);
+            Assert.AreEqual("0,00 €", ws.Cells["A9"].Value);
+            Assert.AreEqual("--- €", ws.Cells["A10"].Value);
+            Assert.AreEqual("0,00 €)", ws.Cells["A11"].Value);
+            Assert.AreEqual("---€)", ws.Cells["A12"].Value);
+            Assert.AreEqual("1.027,60 €", ws.Cells["A13"].Value);
+            Assert.AreEqual("-1028-- €)", ws.Cells["A14"].Value);
+            Assert.AreEqual("445,58 €)", ws.Cells["A15"].Value);
+            Assert.AreEqual("-446-- €)", ws.Cells["A16"].Value);
+            Assert.AreEqual("0,00 €", ws.Cells["A17"].Value);
+            Assert.AreEqual("0,00 €)", ws.Cells["A18"].Value);
+            Assert.AreEqual("--- €)", ws.Cells["A19"].Value);
+            Assert.AreEqual("--- €", ws.Cells["A20"].Value);
         }
     }
 }
