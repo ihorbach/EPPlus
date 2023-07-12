@@ -183,7 +183,7 @@ namespace EPPlusTest
             
             //Arrange
 #if ! Core
-            var dir = AppDomain.CurrentDomain.BaseDirectory;
+            var dir = AppDomain.CurrentDomain.BaseDirectory; 
             var excelPackage = new ExcelPackage(new FileInfo(Path.Combine(dir, "Workbooks", "TestDoc_WithCharts_xlsx.xlsx")));
 
             //Act
