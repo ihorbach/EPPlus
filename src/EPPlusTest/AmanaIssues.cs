@@ -604,6 +604,6 @@ namespace EPPlusTest
 
             // ASSERT
             Assert.AreEqual(expectedValue, sheet.Cells[cellName].Value.ToString());
-        }
+        
     }
 }
