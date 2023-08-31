@@ -12,6 +12,7 @@
  *************************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Metadata;
@@ -30,12 +31,41 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions.Text
             ValidateArguments(arguments, 2);
             var value = arguments.First().ValueFirst;
             var format = ArgToString(arguments, 1);
+
             format = format.Replace(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator, ".");
-            format = format.Replace(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator.Replace((char)160,' '), ","); //Special handling for No-Break Space
+            format = format.Replace(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator.Replace((char)160, ' '), ","); //Special handling for No-Break Space
 
-            var result = context.ExcelDataProvider.GetFormat(value, format);
+            //format = ChangeFormatToEnglishFormat(format);
+            format = context.ExcelDataProvider.GetFormat(value, format);
 
-            return CreateResult(result, DataType.String);
+            return CreateResult(format, DataType.String);
+        }
+
+        private string ChangeFormatToEnglishFormat(string format)
+        {
+
+            /* DecimalSeparator and GroupSeparator can switch e.g. Culture is German.
+             Using only replace would result in deleting one of the separators e.g 
+            "###.###,###".Replace(".",",") => "###,###,###".Replace(",",".") => "###.###.###" 
+            the correct replacement in this example would be "###,###.###" */
+          
+            var decimalSeparator = ExcelWorkbook.Culture != null 
+                ? ExcelWorkbook.Culture.NumberFormat.NumberDecimalSeparator 
+                : CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+
+            var groupSeparator = ExcelWorkbook.Culture != null 
+                ? ExcelWorkbook.Culture.NumberFormat.NumberGroupSeparator 
+                : CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator;
+
+            var groupSeparatorSplit = format.Split(groupSeparator[0]);
+            var resultFormat = "";
+
+            groupSeparatorSplit.ToList()
+                .ForEach(g => resultFormat += "," + g.Replace(decimalSeparator, "."));
+
+            return !resultFormat.StartsWith(groupSeparator)
+                ? resultFormat.Substring(0)
+                : resultFormat;
         }
     }
 }

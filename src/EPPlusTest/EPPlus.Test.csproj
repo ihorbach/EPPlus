@@ -222,6 +222,8 @@
     <EmbeddedResource Include="Workbooks\Issue_WithRangeCalculation.xlsx" />
     <None Remove="Workbooks\GermanBuildInNumberFormat.xlsx" />
     <EmbeddedResource Include="Workbooks\GermanBuildInNumberFormat.xlsx" />
+    <None Remove="Workbooks\TestDoc_Textformat_xlsx.xlsx" />
+    <EmbeddedResource Include="Workbooks\TestDoc_Textformat_xlsx.xlsx" />
   </ItemGroup>
   <PropertyGroup>
     <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
