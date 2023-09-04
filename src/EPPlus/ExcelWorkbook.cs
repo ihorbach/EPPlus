@@ -570,6 +570,9 @@ namespace OfficeOpenXml
                 return _names;
             }
         }
+        
+        
+        
         internal ExcelExternalLinksCollection _externalLinks = null;
         /// <summary>
         /// A collection of links to external workbooks and it's cached data.
@@ -1094,6 +1097,23 @@ namespace OfficeOpenXml
             }
         }
 
+        private const string FULL_PRECISION = "d:calcPr/@fullPrecision";
+        /// <summary>
+        /// Should Excel calculate with the displayed value?
+        /// </summary>
+        public bool FullPrecision
+        {
+            get
+            {
+
+                return GetXmlNodeBool(FULL_PRECISION, true);
+            }
+            set
+            {
+                SetXmlNodeBool(FULL_PRECISION, value);
+            }
+        }
+        
         ExcelThemeManager _theme = null;
         /// <summary>
         /// Create and manage the theme for the workbook.

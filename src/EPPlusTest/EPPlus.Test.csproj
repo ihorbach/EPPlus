@@ -218,6 +218,8 @@
     <EmbeddedResource Include="Workbooks\TestDoc_SharedFormula.xlsx" />
     <None Remove="Workbooks\TestDoc_VLookUpDateValue_xlsx.xlsx" />
     <EmbeddedResource Include="Workbooks\TestDoc_VLookUpDateValue_xlsx.xlsx" />
+    <None Remove="Workbooks\FullPrecisionIF.xlsx" />
+    <EmbeddedResource Include="Workbooks\FullPrecisionIF.xlsx" />
     <None Remove="Workbooks\Issue_WithRangeCalculation.xlsx" />
     <EmbeddedResource Include="Workbooks\Issue_WithRangeCalculation.xlsx" />
     <None Remove="Workbooks\GermanBuildInNumberFormat.xlsx" />

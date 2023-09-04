@@ -539,7 +539,7 @@ namespace EPPlusTest
             Assert.AreEqual(expectedValue1, package.Workbook.Worksheets["Tabelle1"].Cells[4, 1].Value.ToString());
             Assert.AreEqual(expectedValue2, package.Workbook.Worksheets["Tabelle1"].Cells[5, 1].Value.ToString());
         }
-
+        
         [TestMethod,
          Description(
              " VLOOKUP is loosing the reference to the worksheet and is therefore always taking the first worksheet")]
@@ -688,6 +688,21 @@ namespace EPPlusTest
                 Assert.AreEqual("0", sheet.Cells["E2"].Value.ToString());
                 Assert.AreEqual("0", sheet.Cells["A3"].Value.ToString());
             }
+        }
+        
+        [TestMethod]
+        public void Workbook_FullPrecision()
+        {
+            // Arrange
+            var excelStream = GetTestStream("FullPrecisionIF.xlsx");
+            var excelPackage = new ExcelPackage(excelStream);
+            
+            // Act
+            excelPackage.Workbook.Calculate();
+            
+            // Assert
+            Assert.IsFalse(excelPackage.Workbook.FullPrecision);
+            Assert.AreEqual("OK", excelPackage.Workbook.Worksheets[0].Cells["A3"].Value);
         }
     }
 }
