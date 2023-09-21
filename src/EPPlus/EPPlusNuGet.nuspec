@@ -12,5 +12,9 @@
 		<copyright>Copyright 2023</copyright>
 		<tags>Tag1 Tag2</tags>
 	</metadata>
+	<files>
+		<file src="bin\$Configuration$\net6.0\*" target="lib/net6.0"/>
+	</files>
+
 </package>
 
